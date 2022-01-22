@@ -1,0 +1,42 @@
+if(request.getParameter("caseNo") != null){ // check if any case been open
+                int toint = Integer.parseInt(request.getParameter("caseNo"));  
+                newGame.setcaseNo(toint);
+            }        
+            for(int i =0;i <12;i++){        // setup the attribute for showing the case's face
+                session.setAttribute("case"+i ,newGame.showCase(i));
+                
+            }
+            
+            session.setAttribute("bankOffer" ,newGame.bankOffer());     // set bank offer                 
+            session.setAttribute("notYetopend" ,newGame.notYetopend()); //setAttribute for display number of cases not yet opend                
+            session.setAttribute("notopendCurrent" ,newGame.notOpendCurrentRound()); //setAttribute for display number of cases not yet opend in current round
+            session.setAttribute("roundNo" ,newGame.getroundNo());  // for display the round number
+            session.setAttribute("largest" ,newGame.getMaxCaseValue());  // for display the largest amount unrevealed
+
+            if(newGame.callbank() == true && newGame.getroundNo()!= 5  ){   
+                    newGame.setnextround();
+                    RequestDispatcher dispatcher2 =getServletContext().getRequestDispatcher("/jsp/BankOffer.jsp");
+                    dispatcher2.forward(request, response);
+                    
+                }
+                else if (request.getParameter("checksave") !=null){
+                    
+                    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsp/SaveGame.jsp");
+                    dispatcher.forward(request, response);
+                }
+                else if (request.getParameter("saveGame") !=null){
+                    store.insert(store.getUserName(),store.getPassphrase(),newGame);// to save game into sql
+                    
+                    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsp/SaveCompleted.jsp");
+                    dispatcher.forward(request, response);
+                                
+                }
+                       
+                else if (( newGame.getroundNo() == 5 &&  newGame.notOpendCurrentRound() == 0)|| (request.getParameter("deal") !=null)){
+                    RequestDispatcher dispatcher2 =getServletContext().getRequestDispatcher("/jsp/FinishGame.jsp");
+                    dispatcher2.forward(request, response);
+                } 
+                else {
+                    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsp/NewGame.jsp");
+                    dispatcher.forward(request, response);
+                }

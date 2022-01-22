@@ -1,0 +1,10 @@
+<Context>
+    <Resource name="jdbc/MyConnection"
+        type="javax.sql.DataSource"
+        maxActive="10"
+        maxIdle="5"
+        username="jdbcUserseng2050"
+        password="mySecur3Passw0rd!"
+        driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+        url="jdbc:sqlserver://localhost\SENG2050SQL;databaseName=SENG2050A2" />
+</Context>
